@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Чаросқа арналған әлем ♡</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --pink: #f5b8d1;
+      --light: #fff3f8;
+      --dark: #9b456f;
+      --text: #78435e;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 15%, #ffffff, transparent 30%),
+        linear-gradient(135deg, #fff7fb, #ffe0ed, #f8d5e7);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .background-effects {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .floating {
+      position: absolute;
+      bottom: -40px;
+      animation: floatUp linear forwards;
+      color: #df83b0;
+      opacity: 0.7;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) rotate(0);
+        opacity: 0;
+      }
+      15% { opacity: 0.8; }
+      to {
+        transform: translateY(-115vh) rotate(40deg);
+        opacity: 0;
+      }
+    }
+
+    header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 6%;
+    }
+
+    .logo {
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .music-button,
+    .secondary-button {
+      border: 1px solid #edc3d7;
+      background: rgba(255,255,255,.7);
+      color: var(--dark);
+      border-radius: 30px;
+      padding: 11px 17px;
+      cursor: pointer;
+      transition: .25s;
+    }
+
+    .music-button:hover,
+    .secondary-button:hover {
+      transform: translateY(-2px);
+      background: white;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      width: min(900px, calc(100% - 30px));
+      margin: auto;
+    }
+
+    .screen {
+      display: none;
+      min-height: 78vh;
+      align-items: center;
+      justify-content: center;
+      padding: 25px 0 45px;
+    }
+
+    .screen.active {
+      display: flex;
+      animation: appear .7s ease;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      width: 100%;
+      text-align: center;
+      padding: clamp(25px, 6vw, 60px);
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: 30px;
+      background: rgba(255,255,255,.63);
+      box-shadow: 0 20px 60px rgba(176,83,129,.14);
+      backdrop-filter: blur(15px);
+    }
+
+    .heart {
+      display: inline-block;
+      font-size: 55px;
+      animation: heartbeat 1.8s infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.13); }
+    }
+
+    .eyebrow {
+      margin-top: 15px;
+      color: #b7658d;
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      margin: 18px 0;
+      color: var(--dark);
+      font-family: Georgia, serif;
+      font-weight: 500;
+    }
+
+    h1 {
+      font-size: clamp(40px, 8vw, 75px);
+      line-height: 1.1;
+    }
+
+    h2 {
+      font-size: clamp(30px, 6vw, 44px);
+    }
+
+    p {
+      line-height: 1.8;
+      font-size: 16px;
+    }
+
+    .description {
+      max-width: 550px;
+      margin: 0 auto 27px;
+    }
+
+    .primary-button {
+      margin: 10px 5px;
+      border: 0;
+      border-radius: 30px;
+      padding: 14px 25px;
+      color: white;
+      font-weight: bold;
+      background: linear-gradient(135deg, #ec9ec1, #c85c91);
+      box-shadow: 0 10px 25px rgba(198,92,145,.23);
+      cursor: pointer;
+      transition: .25s;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(198,92,145,.3);
+    }
+
+    .hint {
+      margin-top: 18px;
+      color: #aa7892;
+      font-size: 13px;
+    }
+
+    .surprises {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 28px 0;
+    }
+
+    .surprise {
+      padding: 22px 10px;
+      min-height: 140px;
+      border: 1px solid #f0c5da;
+      border-radius: 20px;
+      background: rgba(255,255,255,.7);
+      color: var(--dark);
+      cursor: pointer;
+      transition: .25s;
+    }
+
+    .surprise:hover {
+      transform: translateY(-5px);
+      background: white;
+    }
+
+    .surprise span {
+      display: block;
+      font-size: 35px;
+      margin-bottom: 10px;
+    }
+
+    #message {
+      min-height: 70px;
+      padding: 18px;
+      border-radius: 17px;
+      background: #fff0f6;
+      line-height: 1.7;
+    }
+
+    .envelope {
+      position: relative;
+      width: min(300px, 80vw);
+      margin: 35px auto 20px;
+      cursor: pointer;
+      padding-bottom: 20px;
+    }
+
+    .envelope-base {
+      position: relative;
+      width: 100%;
+      height: 150px;
+      border-radius: 8px 8px 15px 15px;
+      background: #f2a4c6;
+      box-shadow: 0 12px 25px #cf80a333;
+    }
+
+    .envelope-base::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: #f7bfd7;
+      clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: #f8c6dc;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top;
+      transition: transform .7s;
+      z-index: 3;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    .seal {
+      position: absolute;
+      top: 55px;
+      left: calc(50% - 20px);
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #d96f9f;
+      color: white;
+      z-index: 4;
+      transition: opacity .3s;
+    }
+
+    /* Хаттың қағазы — енді икемді, толық мәтін көрінеді */
+    .letter-paper {
+      position: absolute;
+      z-index: 2;
+      left: 8%;
+      bottom: 10px;
+      width: 84%;
+      max-height: 110px;
+      overflow-y: auto;
+      padding: 15px;
+      border-radius: 7px;
+      background: #fffdfd;
+      transition: .8s;
+      text-align: left;
+      font-size: 14px;
+      box-shadow: 0 6px 18px rgba(155,69,111,.12);
+      scrollbar-width: thin;
+      scrollbar-color: #e79bc0 transparent;
+    }
+
+    .letter-paper::-webkit-scrollbar {
+      width: 6px;
+    }
+    .letter-paper::-webkit-scrollbar-thumb {
+      background: #e79bc0;
+      border-radius: 10px;
+    }
+    .letter-paper::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .letter-paper strong {
+      display: block;
+      font-family: Georgia, serif;
+      color: var(--dark);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .letter-content {
+      display: none;
+      margin-top: 12px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      font-size: 14px;
+    }
+
+    .envelope.open .flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope.open .seal {
+      opacity: 0;
+    }
+
+    .envelope.open .letter-paper {
+      max-height: 340px;
+      bottom: 30px;
+      transform: translateY(-40px);
+    }
+
+    .envelope.open .letter-content {
+      display: block;
+      animation: appear .6s ease;
+    }
+
+    .gift {
+      display: inline-block;
+      border: 0;
+      background: transparent;
+      font-size: 85px;
+      cursor: pointer;
+      transition: .3s;
+    }
+
+    .gift:hover {
+      transform: rotate(6deg) scale(1.08);
+    }
+
+    #giftMessage {
+      display: none;
+      margin: 20px auto;
+      padding: 25px;
+      max-width: 500px;
+      border-radius: 20px;
+      background: #fff0f6;
+    }
+
+    #giftMessage.show {
+      display: block;
+      animation: appear .6s ease;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 10px 15px 25px;
+      text-align: center;
+      color: #ad7892;
+      font-size: 13px;
+    }
+
+    @media (max-width: 620px) {
+      header { padding: 15px; }
+      .logo { font-size: 13px; }
+      .music-button { padding: 9px 11px; font-size: 12px; }
+      .card { padding: 28px 18px; border-radius: 23px; }
+      .surprises { grid-template-columns: 1fr; }
+      .surprise { min-height: 100px; }
+      .envelope.open .letter-paper { max-height: 380px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-effects" id="backgroundEffects" aria-hidden="true"></div>
+
+  <header>
+    <div class="logo">♡ Чаросқа арналған әлем</div>
+    <button class="music-button" id="musicButton" type="button">
+      ♫ Әуенді қосу
+    </button>
+  </header>
+
+  <main>
+    <!-- 1-ЭКРАН -->
+    <section class="screen active" id="home">
+      <div class="card">
+        <div class="heart">♡</div>
+        <div class="eyebrow">кішкентай ғана тосын сый</div>
+        <h1>Чарос,<br>бұл әлем сен үшін</h1>
+        <p class="description">
+          Саған арнап кішкентай бір әлем дайындадым.
+          Асықпай ашып көр — мұнда бірнеше тосын сый жасырылған. 💗
+        </p>
+        <button class="primary-button" data-go="world">
+          Әлеміңді аш ♡
+        </button>
+        <p class="hint">Саған арналған кішкентай қуаныш ✨</p>
+      </div>
+    </section>
+
+    <!-- 2-ЭКРАН -->
+    <section class="screen" id="world">
+      <div class="card">
+        <div class="eyebrow">саған арналған жылы сөздер</div>
+        <h2>Кішкентай сәттер 💗</h2>
+        <p>Жүректердің бірін басып, ішіндегі сөзді аш.</p>
+
+        <div class="surprises">
+          <button class="surprise" data-note="Күнің әрдайым әдемі сәттерге толы болсын. 🌷">
+            <span>🌷</span>
+            <strong>Жылы сөз</strong>
+          </button>
+          <button class="surprise" data-note="Сенің ерекше екеніңді ұмытпа. Әлемде сен сияқты дәл бір адам ғана бар. 💖">
+            <span>💖</span>
+            <strong>Еске салу</strong>
+          </button>
+          <button class="surprise" data-note="Кішкентай қуаныштардың өзі жүрекке үлкен жылулық сыйласын. ✨">
+            <span>✨</span>
+            <strong>Тілек</strong>
+          </button>
+        </div>
+
+        <div id="message" aria-live="polite">
+          Бір жүректі таңда — саған арналған сөз осында шығады.
+        </div>
+
+        <div>
+          <button class="primary-button" data-go="letter">Саған хатым бар 💌</button>
+          <button class="secondary-button" data-go="home">Басына қайту</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3-ЭКРАН -->
+    <section class="screen" id="letter">
+      <div class="card">
+        <div class="eyebrow">шын көңілден</div>
+        <h2>Саған хатым бар 💌</h2>
+        <p>Конвертті басып аш. Хаттың мәтінін кейін өзің жазасың.</p>
+
+        <div class="envelope" id="envelope" role="button" tabindex="0"
+             aria-label="Хатты ашу" aria-expanded="false">
+          <div class="envelope-base"></div>
+          <div class="letter-paper">
+            <strong>Чаросқа ♡</strong>
+            <div class="letter-content" id="letterContent"></div>
+          </div>
+          <div class="flap"></div>
+          <div class="seal">♡</div>
+        </div>
+
+        <p class="hint" id="envelopeHint">Конвертті басып көр 💗</p>
+        <button class="primary-button" data-go="gift">Тағы бір тосын сый 🎁</button>
+        <button class="secondary-button" data-go="world">Артқа</button>
+      </div>
+    </section>
+
+    <!-- 4-ЭКРАН -->
+    <section class="screen" id="gift">
+      <div class="card">
+        <div class="eyebrow">соңғы құпия</div>
+        <h2>Саған кішкентай сыйлығым бар</h2>
+        <p>Қорапты басып, соңғы тосын сыйды аш.</p>
+
+        <button class="gift" id="giftButton" aria-label="Сыйлықты ашу">🎁</button>
+
+        <div id="giftMessage" aria-live="polite">
+          <div class="heart">💗</div>
+          <h2>**Жаным, Чаросым… ❤️**</h2>
+          <p>
+            Саған осы кішкентай әлемді жайдан-жай жасап жатқан жоқпын. Ішімдегі сезімдерімді, саған айтқым келетін сөздерімді осылай жеткізгім келді. Кейде бәрін сөзбен түсіндіру қиын болады ғой… Бірақ бір нәрсені білгеніңді қалаймын: сен мен үшін өте қымбат жансың. ❤️
+
+Біз де өмірде кішкене қиындықтарға кездесіп қалдық. Кейде бәрі ойлағанымыздай болмауы мүмкін, кейде бір-бірімізді түсіну қиын болатын сәттер де болуы мүмкін. Бірақ менің ойымша, шынайы сезім тек бақытты күндерде бірге болумен өлшенбейді. Ең маңыздысы — қиын кездерде де бір-бірімізді түсінуге тырысу, қолдау көрсету және қол ұстасып алға жүру.
+
+Мен болашағымызда қандай жағдайлар кездесетінін білмеймін. Бірақ бір нәрсені қалаймын: өмір бізге қандай сынақ әкелсе де, бір-бірімізге қарсы емес, бір-біріміздің жанымызда болсақ екен. Қиындықтар бізді алыстатпай, керісінше, бір-бірімізді жақсырақ түсінуге үйретсе екен. Қандай мәселе болса да, үндемей алыстағаннан гөрі, отырып сөйлесіп, бір-бірімізді тыңдап, бірге шешім тапсақ деймін.
+
+**Мен сенімен тек әдемі күндерді ғана емес, өмірдің шынайы сәттерін де бірге өткергім келеді.** Қуанғанда бірге күліп, көңіліміз түскенде бір-бірімізге демеу болып, армандарымызға бірге қадам басқым келеді. Сенің шаршаған кезіңде жаныңнан табылып, өзіңді жалғыз сезінбеуіңе себеп болғым келеді. Сенің қуанышың мен үшін маңызды, ал сенің сезімдеріңді түсіну де мен үшін маңызды.
+
+Мүмкін, біз әлі талай нәрсені үйренерміз. Бір-бірімізді түсінуді, ренжіскен кезде дұрыс сөйлесуді, кешірім сұрауды, бір-бірімізге сенім беруді… Бірақ мен осының бәрін бірге үйренуге дайынмын. Өйткені мен үшін біздің арамыздағы сезім ғана емес, сол сезімді аялап, сақтай білуіміз де маңызды.
+
+Чаросым, сенен мінсіз болуды күтпеймін. Мен тек екеуіміздің де осы қарым-қатынасқа шын көңілмен қарағанымызды қалаймын. Қандай жағдай болса да, бір-біріміздің жүрегімізді ауыртпауға тырысып, қиындықтарды бірге еңсеруге күш салсақ деймін.
+
+Осы сайтты да сол оймен жасап жатырмын. Бұл жай ғана экрандағы жүректер мен әдемі сөздер емес. Бұл — саған деген сезімімді өз қолыммен жеткізгім келген кішкентай сыйлығым. Бір күні осыны көргенде, менің саған арнап уақыт бөліп, әр бөлшегін ойластырғанымды сезсең екен. 🥹💗
+
+**Менің тілегім — қандай жағдай болса да, екеуіміз бір-бірімізді таңдап, бір-бірімізді бағалап, бірге алға жылжи алсақ екен.** Біздің әңгімелеріміз таусылмасын, күлкіміз азаймасын, ал қиын күндерде бір-бірімізге деген мейіріміміз жоғалмасын.
+
+Сенімен бірге әлі талай әдемі естеліктер жинағым келеді. Бірге армандап, бірге мақсат қойып, бүгінгі кішкентай қиындықтарымызды ертең күлімдеп еске алатын күндерге жетсек деймін.
+
+Сен мен үшін жай ғана бір адам емессің, Чаросым. Сен — менің көңілімнен ерекше орын алған жансың. ❤️
+
+**Қандай жол кездессе де, сол жолда бір-бірімізге серік бола білейік. Қол ұстасып, бірге өсейік, бірге үйренейік, бірге бақытты болуға тырысайық.**
+
+Менің саған арнаған ең үлкен тілегім — әрдайым жүзіңнен күлкі кетпесін. Ал сол күлкіге кішкентай болса да себепші бола алсам, мен үшін соның өзі үлкен қуаныш.
+
+*Саған арнап, шын жүрегіммен. ❤️*
+
+**Сенің адамыңнан, саған деген шынайы сезіммен. 💗**
+          </p>
+          <strong>Саған арнап, шын көңілмен.</strong>
+        </div>
+
+        <div>
+          <button class="primary-button" data-go="home">Әлемді қайта көру ↺</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Чаросқа арнап, ықыласпен жасалды <span>♥</span></footer>
+
+  <script>
+    // 1. Экрандар арасында ауысу
+    const screens = document.querySelectorAll(".screen");
+
+    function showScreen(id) {
+      screens.forEach(screen => {
+        screen.classList.toggle("active", screen.id === id);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.querySelectorAll("[data-go]").forEach(button => {
+      button.addEventListener("click", () => showScreen(button.dataset.go));
+    });
+
+    // 2. Қалқып жүретін жүректер мен жұлдыздар
+    const background = document.getElementById("backgroundEffects");
+    const symbols = ["♡", "♥", "✧", "✦", "୨୧"];
+
+    function createFloatingSymbol() {
+      const item = document.createElement("span");
+      item.className = "floating";
+      item.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      item.style.left = Math.random() * 100 + "vw";
+      item.style.fontSize = (14 + Math.random() * 18) + "px";
+      item.style.animationDuration = (9 + Math.random() * 8) + "s";
+      background.appendChild(item);
+      setTimeout(() => item.remove(), 18000);
+    }
+
+    for (let i = 0; i < 12; i++) {
+      setTimeout(createFloatingSymbol, i * 300);
+    }
+    setInterval(createFloatingSymbol, 900);
+
+    // 3. Жасырын жылы сөздерді көрсету
+    const message = document.getElementById("message");
+
+    document.querySelectorAll("[data-note]").forEach(button => {
+      button.addEventListener("click", () => {
+        message.textContent = button.dataset.note;
+        message.animate(
+          [
+            { opacity: 0, transform: "translateY(6px)" },
+            { opacity: 1, transform: "translateY(0)" }
+          ],
+          { duration: 350, easing: "ease-out" }
+        );
+      });
+    });
+
+    // 4. Хатты ашу
+    // ✏️ LETTER_TEXT ішіндегі мәтінді өз хатыңмен ауыстыр.
+    // Қанша ұзын жазсаң да, толық көрінеді (керек болса ішінде скролл шығады).
+    const LETTER_TEXT = `Чаросым, сенен мінсіз болуды күтпеймін.
+Мен тек екеуіміздің де осы қарым-қатынасқа шын көңілмен қарағанымызды қалаймын.
+Қандай жағдай болса да, бір-біріміздің жүрегімізді ауыртпауға тырысып, қиындықтарды бірге еңсеруге күш салсақ деймін.`;
+
+    const envelope = document.getElementById("envelope");
+    const letterContent = document.getElementById("letterContent");
+    const envelopeHint = document.getElementById("envelopeHint");
+
+    letterContent.textContent = LETTER_TEXT;
+
+    function toggleEnvelope() {
+      const opened = envelope.classList.toggle("open");
+      envelope.setAttribute("aria-expanded", String(opened));
+      envelopeHint.textContent = opened
+        ? "Хатың ашылды 💗"
+        : "Конвертті басып көр 💗";
+    }
+
+    envelope.addEventListener("click", toggleEnvelope);
+    envelope.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggleEnvelope();
+      }
+    });
+
+    // 5. Соңғы тосын сый
+    const giftButton = document.getElementById("giftButton");
+    const giftMessage = document.getElementById("giftMessage");
+
+    giftButton.addEventListener("click", () => {
+      const opened = giftMessage.classList.toggle("show");
+      giftButton.textContent = opened ? "💝" : "🎁";
+      giftButton.setAttribute(
+        "aria-label",
+        opened ? "Сыйлықты жабу" : "Сыйлықты ашу"
+      );
+
+      if (opened) {
+        for (let i = 0; i < 12; i++) {
+          setTimeout(createFloatingSymbol, i * 100);
+        }
+      }
+    });
+
+    // 6. Жұмсақ фортепианоға ұқсас әуен.
+    let audioContext = null;
+    let musicTimer = null;
+    let musicOn = false;
+    let noteIndex = 0;
+
+    const musicButton = document.getElementById("musicButton");
+
+    const melody = [
+      [523.25, 0.55], [659.25, 0.55], [783.99, 0.8],
+      [659.25, 0.55], [587.33, 0.55], [659.25, 0.9],
+      [523.25, 0.55], [440.00, 0.55], [392.00, 0.9],
+      [440.00, 0.55], [523.25, 0.8], [493.88, 1.0]
+    ];
+
+    function playNote(frequency, duration) {
+      if (!audioContext || !musicOn) return;
+
+      const now = audioContext.currentTime;
+      const oscillator = audioContext.createOscillator();
+      const overtone = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      const overtoneGain = audioContext.createGain();
+
+      oscillator.type = "triangle";
+      oscillator.frequency.value = frequency;
+      overtone.type = "sine";
+      overtone.frequency.value = frequency * 2;
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.10, now + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+      overtoneGain.gain.setValueAtTime(0.0001, now);
+      overtoneGain.gain.exponentialRampToValueAtTime(0.018, now + 0.03);
+      overtoneGain.gain.exponentialRampToValueAtTime(0.0001, now + duration * 0.7);
+
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+      overtone.connect(overtoneGain);
+      overtoneGain.connect(audioContext.destination);
+
+      oscillator.start(now);
+      overtone.start(now);
+      oscillator.stop(now + duration + 0.05);
+      overtone.stop(now + duration + 0.05);
+    }
+
+    function playNextNote() {
+      if (!musicOn) return;
+      const [frequency, duration] = melody[noteIndex % melody.length];
+      playNote(frequency, duration * 0.9);
+      noteIndex++;
+      musicTimer = setTimeout(playNextNote, duration * 1000);
+    }
+
+    async function startMusic() {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+
+      if (!AudioContextClass) {
+        alert("Бұл браузер дыбысты қолдамайды. Басқа браузерде ашып көр.");
+        return;
+      }
+
+      if (!audioContext) audioContext = new AudioContextClass();
+      if (audioContext.state === "suspended") {
+        await audioContext.resume();
+      }
+
+      if (musicOn) return;
+      musicOn = true;
+      musicButton.textContent = "♫ Әуенді тоқтату";
+      musicButton.setAttribute("aria-pressed", "true");
+      playNextNote();
+    }
+
+    function stopMusic() {
+      musicOn = false;
+      clearTimeout(musicTimer);
+      musicButton.textContent = "♫ Әуенді қосу";
+      musicButton.setAttribute("aria-pressed", "false");
+    }
+
+    musicButton.addEventListener("click", () => {
+      if (musicOn) stopMusic();
+      else startMusic();
+    });
+  </script>
+</body>
+</html>
